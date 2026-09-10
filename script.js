@@ -80,3 +80,6 @@ if (contactToggle && contactForm) {
             formStatus.classList.add("error");
         } finally {
             submitBtn.disabled = false;
+        }
+    });
+}
