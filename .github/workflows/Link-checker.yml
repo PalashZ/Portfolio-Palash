@@ -1,0 +1,16 @@
+name: Kolla trasiga länkar
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  linkcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Kontrollera länkar
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress './**/*.html'
