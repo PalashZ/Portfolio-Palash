@@ -42,3 +42,41 @@ if (track && dotsContainer) {
     dots.forEach((d, i) => d.classList.toggle("active", i === index));
   }, { passive: true });
 }
+const contactToggle = document.getElementById("contactToggle");
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+
+if (contactToggle && contactForm) {
+    contactToggle.addEventListener("click", () => {
+        contactForm.classList.toggle("open");
+        contactToggle.textContent = contactForm.classList.contains("open")
+            ? "Dölj formuläret"
+            : "Skicka meddelande";
+    });
+
+    contactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const submitBtn = contactForm.querySelector(".form-submit");
+        submitBtn.disabled = true;
+        formStatus.textContent = "Skickar...";
+        formStatus.classList.remove("error");
+
+        try {
+            const response = await fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: { "Accept": "application/json" }
+            });
+
+            if (response.ok) {
+                formStatus.textContent = "Tack! Meddelandet är skickat.";
+                contactForm.reset();
+            } else {
+                throw new Error("Fel vid skickning");
+            }
+        } catch (err) {
+            formStatus.textContent = "Något gick fel. Försök igen eller mejla direkt.";
+            formStatus.classList.add("error");
+        } finally {
+            submitBtn.disabled = false;
